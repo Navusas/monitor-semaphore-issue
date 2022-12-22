@@ -92,10 +92,12 @@ namespace Renci.SshNet.Common
                 var oldCount = _currentCount;
 
                 _currentCount += releaseCount;
+                System.Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId}: Releasing {releaseCount} to semaphore. Current: {_currentCount}");
 
                 // signal waithandle when the original semaphore count was zero
                 if (_waitHandle != null && oldCount == 0)
                 {
+                    System.Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId}: Oldcount was 0, and there is somebody waiting for semaphore. I will signal waithandle");
                     _waitHandle.Set();
                 }
 
@@ -112,7 +114,7 @@ namespace Renci.SshNet.Common
         {
             lock (_lock)
             {
-                Debug.Assert(_currentCount<=3, $"{_currentCount}<=3");
+                //Debug.Assert(_currentCount<=3, $"{_currentCount}<=3");
                 if(_currentCount > 5) {}
                 while (_currentCount < 1)
                 {
