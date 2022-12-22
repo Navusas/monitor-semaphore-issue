@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading;
+using Renci.SshNet.Abstractions;
 using Renci.SshNet.Common;
 using Renci.SshNet.Messages.Connection;
 
@@ -64,10 +65,10 @@ namespace Renci.SshNet.Channels
         /// </summary>
         public void Open()
         {
+            DiagnosticAbstraction.Log($"Channel is open = {IsOpen}. {_failedOpenAttempts}/{ConnectionInfo.RetryAttempts}");
             //  Try to open channel several times
             while (!IsOpen && _failedOpenAttempts < ConnectionInfo.RetryAttempts)
             {
-                Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId}: Try to open a channel");
                 SendChannelOpenMessage();
                 try
                 {
@@ -80,6 +81,7 @@ namespace Renci.SshNet.Channels
                     throw;
                 }
             }
+            DiagnosticAbstraction.Log($"Channel opened. Attempt: {_failedOpenAttempts}/{ConnectionInfo.RetryAttempts}");
 
             if (!IsOpen)
                 throw new SshException(string.Format(CultureInfo.CurrentCulture, "Failed to open a channel after {0} attempts.", _failedOpenAttempts));
@@ -442,8 +444,16 @@ namespace Renci.SshNet.Channels
         /// </remarks>
         private void ReleaseSemaphore()
         {
+            DiagnosticAbstraction.Log($"About to release semaphore");
+
             if (Interlocked.CompareExchange(ref _sessionSemaphoreObtained, 0, 1) == 1)
+            {
                 SessionSemaphore.Release();
+            }
+            else
+            {
+                DiagnosticAbstraction.Log($"Semaphore not released, because: {_sessionSemaphoreObtained} | 0 | 1 != 1");
+            }
         }
     }
 }

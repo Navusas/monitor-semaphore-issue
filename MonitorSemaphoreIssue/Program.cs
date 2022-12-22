@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using MonitorSemaphoreIssue;
+using Renci.SshNet.Abstractions;
 
 var sshClient = new SshConnection("", "", "", TimeSpan.FromSeconds(60));
 sshClient.Connect();
@@ -24,11 +25,11 @@ void doStuff(string strName)
 {
     if (!sshClient.IsConnected)
     {
-        Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId}: connecting");
+        DiagnosticAbstraction.Log("Connecting");
         sshClient.Connect();
-        Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId} connected");
+        DiagnosticAbstraction.Log("Connected");
     }
-    Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId} running command: 'sleep 30;'");
+    DiagnosticAbstraction.Log("Running command 'sleep 30;'");
     sshClient.RunCommand("sleep 30;");
-    Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId}: finishing");
+    DiagnosticAbstraction.Log("Finished");
 }

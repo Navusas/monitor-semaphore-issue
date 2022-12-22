@@ -69,13 +69,11 @@ public sealed class SshConnection : ISshConnection
 
     public void Connect()
     {
-        Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId}: Opening connection {m_Id} to {m_Hostname}");
         m_SshClient.Connect();
     }
 
     public void Dispose()
     {
-        Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId}: Disposing connection {m_Id} to {m_Hostname}");
         m_SshClient.Disconnect();
         m_SshClient.Dispose();
     }

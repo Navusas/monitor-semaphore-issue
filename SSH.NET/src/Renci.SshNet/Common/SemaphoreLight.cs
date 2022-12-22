@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading;
+using Renci.SshNet.Abstractions;
 
 namespace Renci.SshNet.Common
 {
@@ -92,12 +93,12 @@ namespace Renci.SshNet.Common
                 var oldCount = _currentCount;
 
                 _currentCount += releaseCount;
-                System.Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId}: Releasing {releaseCount} to semaphore. Current: {_currentCount}");
+                DiagnosticAbstraction.Log($"[Releasing 1 semaphore]. Current: {_currentCount}");
 
                 // signal waithandle when the original semaphore count was zero
                 if (_waitHandle != null && oldCount == 0)
                 {
-                    System.Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId}: Oldcount was 0, and there is somebody waiting for semaphore. I will signal waithandle");
+                    DiagnosticAbstraction.Log($"Oldcount was 0, and there is somebody waiting for semaphore. I will signal everybody waiting");
                     _waitHandle.Set();
                 }
 
@@ -118,13 +119,14 @@ namespace Renci.SshNet.Common
                 if(_currentCount > 5) {}
                 while (_currentCount < 1)
                 {
-                    Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId}: Semaphore {this.CliveTongFoo}: Waiting for available semaphore (sh*t) (current: {_currentCount})");
+
+                    DiagnosticAbstraction.Log($"[Semaphore {this.CliveTongFoo}]: Waiting for semaphore (current: {_currentCount})");
                     Monitor.Wait(_lock);
                 }
 
-                Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId}: Semaphore {this.CliveTongFoo}: About to take the lock (current: {_currentCount})");
+                DiagnosticAbstraction.Log($"[Semaphore {this.CliveTongFoo}]: About to take the lock (current: {_currentCount})");
                 _currentCount--;
-                Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId}: Semaphore {this.CliveTongFoo}: I am taking the lock (now it's: {_currentCount})");
+                DiagnosticAbstraction.Log($"[Semaphore {this.CliveTongFoo}]: taking lock (now it's: {_currentCount})");
 
                 // unsignal waithandle when the semaphore count reaches zero
                 if (_waitHandle != null && _currentCount == 0)
