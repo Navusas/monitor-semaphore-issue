@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonitorSemaphoreIssue", "MonitorSemaphoreIssue\MonitorSemaphoreIssue.csproj", "{332ECBAE-C0A6-4A42-8046-E96A1392AA02}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Renci.SshNet", "SSH.NET\src\Renci.SshNet\Renci.SshNet.csproj", "{EE0E9BAD-7936-4879-85E5-94225A5224B9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{332ECBAE-C0A6-4A42-8046-E96A1392AA02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{332ECBAE-C0A6-4A42-8046-E96A1392AA02}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{332ECBAE-C0A6-4A42-8046-E96A1392AA02}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{332ECBAE-C0A6-4A42-8046-E96A1392AA02}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE0E9BAD-7936-4879-85E5-94225A5224B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE0E9BAD-7936-4879-85E5-94225A5224B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE0E9BAD-7936-4879-85E5-94225A5224B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE0E9BAD-7936-4879-85E5-94225A5224B9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
