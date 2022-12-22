@@ -252,12 +252,12 @@ namespace Renci.SshNet
             _error = null;
             _callback = callback;
 
-            Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId} Creating new channel");
+            DiagnosticAbstraction.Log("Creating new channel");
             _channel = CreateChannel();
             _channel.Open();
             _channel.SendExecRequest(CommandText);
 
-            Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId} done with the task, returnig result");
+            DiagnosticAbstraction.Log("Task completed. Returning result");
             return _asyncResult;
         }
 

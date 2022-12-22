@@ -1,16 +1,25 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 #if FEATURE_DIAGNOSTICS_TRACESOURCE
 using System.Threading;
 #endif // FEATURE_DIAGNOSTICS_TRACESOURCE
 
 namespace Renci.SshNet.Abstractions
 {
-    internal static class DiagnosticAbstraction
+    /// <summary>
+    /// /
+    /// </summary>
+    public static class DiagnosticAbstraction
     {
 #if FEATURE_DIAGNOSTICS_TRACESOURCE
 
         private static readonly SourceSwitch SourceSwitch = new SourceSwitch("SshNetSwitch");
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="traceEventType"></param>
+        /// <returns></returns>
         public static bool IsEnabled(TraceEventType traceEventType)
         {
             return SourceSwitch.ShouldTrace(traceEventType);
@@ -24,12 +33,13 @@ namespace Renci.SshNet.Abstractions
 #endif // DEBUG
 #endif // FEATURE_DIAGNOSTICS_TRACESOURCE
 
-        [Conditional("DEBUG")]
+        /// <summary>
+        /// /
+        /// </summary>
+        /// <param name="text"></param>
         public static void Log(string text)
         {
-#if FEATURE_DIAGNOSTICS_TRACESOURCE
-            Loggging.TraceEvent(TraceEventType.Verbose, Thread.CurrentThread.ManagedThreadId, text);
-#endif // FEATURE_DIAGNOSTICS_TRACESOURCE
+            Console.WriteLine($"{DateTime.Now}: Thread {Thread.CurrentThread.ManagedThreadId}: {text}");
         }
     }
 }

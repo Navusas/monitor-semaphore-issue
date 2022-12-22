@@ -669,7 +669,8 @@ namespace Renci.SshNet
             }
             finally
             {
-                Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId}: Inside finally (Session.cs:652). Returning semaphore count");
+                DiagnosticAbstraction.Log(
+                    $"[{ToHex(SessionId)}]: established connectiong to server (Session.cs:652). Returning semaphore hook");
                 AuthenticationConnection.Release();
             }
         }
@@ -1017,11 +1018,12 @@ namespace Renci.SshNet
             
             if (_keyExchangeInProgress && !(message is IKeyExchangedAllowed))
             {
+                DiagnosticAbstraction.Log($"[{ToHex(SessionId)}]: Session -> SendMessage: Waiting for key exchange to be completed");
                 //  Wait for key exchange to be completed
                 WaitOnHandle(_keyExchangeCompletedWaitHandle);
             }
             
-            DiagnosticAbstraction.Log(string.Format("[{0}] Sending message '{1}' to server: '{2}'.", ToHex(SessionId), message.GetType().Name, message));
+            DiagnosticAbstraction.Log($"[{ToHex(SessionId)}]: Session -> SendMessage: [{ToHex(SessionId)}] Sending message '{message.GetType().Name}' to server: '{message}'");
             
             var paddingMultiplier = _clientCipher == null ? (byte) 8 : Math.Max((byte) 8, _serverCipher.MinimumSize);
             var packetData = message.GetPacket(paddingMultiplier, _clientCompression);
@@ -1883,7 +1885,8 @@ namespace Renci.SshNet
                         {
                             try
                             {
-                                DiagnosticAbstraction.Log(string.Format("[{0}] Shutting down socket.", ToHex(SessionId)));
+                                DiagnosticAbstraction.Log(
+                                    $"[{ToHex(SessionId)}]: Session -> SocketDisconnectAndDispose: Shutting down socket.");
 
                                 // Interrupt any pending reads; should be done outside of socket read lock as we
                                 // actually want shutdown the socket to make sure blocking reads are interrupted.
@@ -2049,6 +2052,8 @@ namespace Renci.SshNet
 
             if (connectionException != null)
             {
+                DiagnosticAbstraction.Log(string.Format("[{0}] Disconnecting after exception: {1}", ToHex(SessionId), exp));
+
                 DiagnosticAbstraction.Log(string.Format("[{0}] Disconnecting after exception: {1}", ToHex(SessionId), exp));
                 Disconnect(connectionException.DisconnectReason, exp.ToString());
             }
