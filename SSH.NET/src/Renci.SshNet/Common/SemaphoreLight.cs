@@ -116,17 +116,15 @@ namespace Renci.SshNet.Common
             lock (_lock)
             {
                 //Debug.Assert(_currentCount<=3, $"{_currentCount}<=3");
-                if(_currentCount > 5) {}
                 while (_currentCount < 1)
                 {
-
-                    DiagnosticAbstraction.Log($"[Semaphore {this.CliveTongFoo}]: Waiting for semaphore (current: {_currentCount})");
+                    DiagnosticAbstraction.Log($"[Semaphore {CliveTongFoo}]: Waiting for semaphore (current: {_currentCount})");
                     Monitor.Wait(_lock);
                 }
 
-                DiagnosticAbstraction.Log($"[Semaphore {this.CliveTongFoo}]: About to take the lock (current: {_currentCount})");
+                DiagnosticAbstraction.Log($"[Semaphore {CliveTongFoo}]: About to take the lock (current: {_currentCount})");
                 _currentCount--;
-                DiagnosticAbstraction.Log($"[Semaphore {this.CliveTongFoo}]: taking lock (now it's: {_currentCount})");
+                DiagnosticAbstraction.Log($"[Semaphore {CliveTongFoo}]: taking lock (now it's: {_currentCount})");
 
                 // unsignal waithandle when the semaphore count reaches zero
                 if (_waitHandle != null && _currentCount == 0)

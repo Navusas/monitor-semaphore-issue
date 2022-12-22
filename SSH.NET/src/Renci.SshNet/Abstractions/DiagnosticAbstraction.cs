@@ -39,11 +39,7 @@ namespace Renci.SshNet.Abstractions
         /// <param name="text"></param>
         public static void Log(string text)
         {
-            DiagnosticAbstraction.Log($" {text}");
-
-#if FEATURE_DIAGNOSTICS_TRACESOURCE
-            Loggging.TraceEvent(TraceEventType.Verbose, Thread.CurrentThread.ManagedThreadId, text);
-#endif // FEATURE_DIAGNOSTICS_TRACESOURCE
+            Console.WriteLine($"Thread {Thread.CurrentThread.ManagedThreadId}: {text}");
         }
     }
 }
