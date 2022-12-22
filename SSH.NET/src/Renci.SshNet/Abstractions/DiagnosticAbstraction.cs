@@ -39,7 +39,7 @@ namespace Renci.SshNet.Abstractions
         /// <param name="text"></param>
         public static void Log(string text)
         {
-            Console.WriteLine($"Thread {Thread.CurrentThread.ManagedThreadId}: {text}");
+            Console.WriteLine($"{DateTime.Now}: Thread {Thread.CurrentThread.ManagedThreadId}: {text}");
         }
     }
 }
