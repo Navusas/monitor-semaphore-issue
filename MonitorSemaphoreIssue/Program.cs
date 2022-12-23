@@ -41,7 +41,7 @@ void doStuff(string strName)
             time = 0;
         }
 
-        sshClient.RunCommand($"sleep {time};");
+        sshClient.RunCommand($"ps aux;");
         Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId}: finishing");
         
         }
