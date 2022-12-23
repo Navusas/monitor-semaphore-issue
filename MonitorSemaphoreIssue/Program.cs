@@ -6,7 +6,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using MonitorSemaphoreIssue;
 
-var sshClient = new SshConnection("", "", "", TimeSpan.FromSeconds(60));
+Console.WriteLine("Go?");
+
+var sshClient = new SshConnection("20.77.67.91", "clive", "skdsklskldk9292939032A", TimeSpan.FromSeconds(60));
 sshClient.Connect();
 
 while (true)
@@ -28,7 +30,7 @@ void doStuff(string strName)
         sshClient.Connect();
         Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId} connected");
     }
-    Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId} running command: 'sleep 30;'");
-    sshClient.RunCommand("sleep 30;");
+    Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId} running command: 'sleep 3;'");
+    sshClient.RunCommand("sleep 3;");
     Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId}: finishing");
 }
