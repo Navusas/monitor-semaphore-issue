@@ -11,26 +11,44 @@ Console.WriteLine("Go?");
 var sshClient = new SshConnection("20.77.67.91", "clive", "skdsklskldk9292939032A", TimeSpan.FromSeconds(60));
 sshClient.Connect();
 
-while (true)
-{
-    List<Task> toWait = new();
-    for (var i = 0; i < 50; i++)
-    {
-        var threadName = $"Thread {i}";
-        toWait.Add(Task.Factory.StartNew(() => doStuff(threadName)));
-    }
-
-    Task.WaitAll(toWait.ToArray());
+for (var i = 0; i < 12; i++) 
+{ 
+    var threadName = $"Thread {i}";
+    Task.Factory.StartNew(() => doStuff(threadName));
 }
+
+Console.ReadLine();
+
 void doStuff(string strName)
 {
-    if (!sshClient.IsConnected)
+    while (true)
     {
-        Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId}: connecting");
-        sshClient.Connect();
-        Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId} connected");
+        try
+        {
+        var random = new Random();
+        if (!sshClient.IsConnected)
+        {
+            Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId}: connecting");
+            sshClient.Connect();
+            Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId} connected");
+        }
+
+        Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId} running command: 'sleep 3;'");
+
+        int time = 3;
+        if (random.Next(2) == 0)
+        {
+            time = 0;
+        }
+
+        sshClient.RunCommand($"sleep {time};");
+        Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId}: finishing");
+        
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+
     }
-    Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId} running command: 'sleep 3;'");
-    sshClient.RunCommand("sleep 3;");
-    Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId}: finishing");
 }
