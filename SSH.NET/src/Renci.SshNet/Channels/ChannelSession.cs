@@ -67,7 +67,7 @@ namespace Renci.SshNet.Channels
             //  Try to open channel several times
             while (!IsOpen && _failedOpenAttempts < ConnectionInfo.RetryAttempts)
             {
-                Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId}: Try to open a channel");
+                Console.WriteLine($"{DateTime.Now}{Thread.CurrentThread.ManagedThreadId}: Try to open a channel");
                 SendChannelOpenMessage();
                 try
                 {
