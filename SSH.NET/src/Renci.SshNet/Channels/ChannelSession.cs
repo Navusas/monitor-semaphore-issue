@@ -64,25 +64,35 @@ namespace Renci.SshNet.Channels
         /// </summary>
         public void Open()
         {
-            //  Try to open channel several times
-            while (!IsOpen && _failedOpenAttempts < ConnectionInfo.RetryAttempts)
+            try
             {
-                Console.WriteLine($"{DateTime.Now}{Thread.CurrentThread.ManagedThreadId}: Try to open a channel");
-                SendChannelOpenMessage();
-                try
+                //  Try to open channel several times
+                while (!IsOpen && _failedOpenAttempts < ConnectionInfo.RetryAttempts)
                 {
-                    WaitOnHandle(_channelOpenResponseWaitHandle);
+                    Console.WriteLine($"{DateTime.Now}{Thread.CurrentThread.ManagedThreadId}: Try to open a channel");
+                    SendChannelOpenMessage();
+                    try
+                    {
+                        WaitOnHandle(_channelOpenResponseWaitHandle);
+                    }
+                    catch (Exception)
+                    {
+                        // avoid leaking session semaphore
+                        ReleaseSemaphore();
+                        throw;
+                    }
                 }
-                catch (Exception)
-                {
-                    // avoid leaking session semaphore
-                    ReleaseSemaphore();
-                    throw;
-                }
-            }
 
-            if (!IsOpen)
-                throw new SshException(string.Format(CultureInfo.CurrentCulture, "Failed to open a channel after {0} attempts.", _failedOpenAttempts));
+                if (!IsOpen)
+                    throw new SshException(string.Format(CultureInfo.CurrentCulture,
+                        "Failed to open a channel after {0} attempts.", _failedOpenAttempts));
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"**** Exception: {e}");
+                throw;
+            }
         }
 
         /// <summary>

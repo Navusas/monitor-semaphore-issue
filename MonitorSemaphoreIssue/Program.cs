@@ -33,21 +33,15 @@ void doStuff(string strName)
             Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId} connected");
         }
 
-        Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId} running command: 'sleep 3;'");
-
-        int time = 3;
-        if (random.Next(2) == 0)
-        {
-            time = 0;
-        }
-
+        Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId} running command");
+        
         sshClient.RunCommand($"ps aux;");
         Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId}: finishing");
         
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
+            Console.WriteLine($"**** Exception: {e}");
         }
 
     }

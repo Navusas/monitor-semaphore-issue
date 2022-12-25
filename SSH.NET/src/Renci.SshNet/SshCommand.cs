@@ -207,6 +207,8 @@ namespace Renci.SshNet
         /// <exception cref="ArgumentException">CommandText property is empty.</exception>
         public IAsyncResult BeginExecute(AsyncCallback callback, object state)
         {
+            try
+            {
             //  Prevent from executing BeginExecute before calling EndExecute
             if (_asyncResult != null && !_asyncResult.EndCalled)
             {
@@ -259,6 +261,13 @@ namespace Renci.SshNet
 
             Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId} done with the task, returnig result");
             return _asyncResult;
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"**** Exception: {e}");
+                throw;
+            }
         }
 
         /// <summary>
