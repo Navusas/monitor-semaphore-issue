@@ -279,7 +279,14 @@ namespace Renci.SshNet.Channels
         /// <value>The session semaphore.</value>
         protected SemaphoreLight SessionSemaphore
         {
-            get { return _session.SessionSemaphore; }
+            get
+            {
+                if (_session == null)
+                {
+                    Console.WriteLine("Boom");
+                }
+                return _session.SessionSemaphore;
+            }
         }
 
         protected void InitializeRemoteInfo(uint remoteChannelNumber, uint remoteWindowSize, uint remotePacketSize)
@@ -844,7 +851,7 @@ namespace Renci.SshNet.Channels
                 var session = _session;
                 if (session != null)
                 {
-                    _session = null;
+                    //_session = null;
                     session.ChannelWindowAdjustReceived -= OnChannelWindowAdjust;
                     session.ChannelDataReceived -= OnChannelData;
                     session.ChannelExtendedDataReceived -= OnChannelExtendedData;
