@@ -118,10 +118,13 @@ namespace Renci.SshNet.Common
                 if(_currentCount > 5) {}
                 while (_currentCount < 1)
                 {
+                    Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId}: Semaphore {this.CliveTongFoo}: Waiting for available semaphore (sh*t) (current: {_currentCount})");
                     Monitor.Wait(_lock);
                 }
 
+                Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId}: Semaphore {this.CliveTongFoo}: About to take the lock (current: {_currentCount})");
                 _currentCount--;
+                Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId}: Semaphore {this.CliveTongFoo}: I am taking the lock (now it's: {_currentCount})");
 
                 // unsignal waithandle when the semaphore count reaches zero
                 if (_waitHandle != null && _currentCount == 0)

@@ -64,35 +64,25 @@ namespace Renci.SshNet.Channels
         /// </summary>
         public void Open()
         {
-            try
+            //  Try to open channel several times
+            while (!IsOpen && _failedOpenAttempts < ConnectionInfo.RetryAttempts)
             {
-                //  Try to open channel several times
-                while (!IsOpen && _failedOpenAttempts < ConnectionInfo.RetryAttempts)
+                Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId}: Try to open a channel");
+                SendChannelOpenMessage();
+                try
                 {
-                    Console.WriteLine($"{DateTime.Now}{Thread.CurrentThread.ManagedThreadId}: Try to open a channel");
-                    SendChannelOpenMessage();
-                    try
-                    {
-                        WaitOnHandle(_channelOpenResponseWaitHandle);
-                    }
-                    catch (Exception)
-                    {
-                        // avoid leaking session semaphore
-                        ReleaseSemaphore();
-                        throw;
-                    }
+                    WaitOnHandle(_channelOpenResponseWaitHandle);
                 }
-
-                if (!IsOpen)
-                    throw new SshException(string.Format(CultureInfo.CurrentCulture,
-                        "Failed to open a channel after {0} attempts.", _failedOpenAttempts));
-
+                catch (Exception)
+                {
+                    // avoid leaking session semaphore
+                    ReleaseSemaphore();
+                    throw;
+                }
             }
-            catch (Exception e)
-            {
-                Console.WriteLine($"**** Exception: {e}");
-                throw;
-            }
+
+            if (!IsOpen)
+                throw new SshException(string.Format(CultureInfo.CurrentCulture, "Failed to open a channel after {0} attempts.", _failedOpenAttempts));
         }
 
         /// <summary>
@@ -415,7 +405,6 @@ namespace Renci.SshNet.Channels
                                                    LocalPacketSize,
                                                    new SessionChannelOpenInfo()));
             }
-    
         }
 
         /// <summary>

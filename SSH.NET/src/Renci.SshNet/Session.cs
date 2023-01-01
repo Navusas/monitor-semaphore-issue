@@ -159,7 +159,7 @@ namespace Renci.SshNet
 
         private Compressor _clientCompression;
 
-        private volatile SemaphoreLight _sessionSemaphore;
+        private SemaphoreLight _sessionSemaphore;
 
         /// <summary>
         /// Holds the factory to use for creating new services.
@@ -210,23 +210,18 @@ namespace Renci.SshNet
         {
             get
             {
-                //if (_sessionSemaphore == null)
+                if (_sessionSemaphore == null)
                 {
                     lock (this)
                     {
-                        Console.WriteLine(("Inside lock"));
                         if (_sessionSemaphore == null)
                         {
-                            Console.WriteLine("Inside");
                             _sessionSemaphore = new SemaphoreLight(ConnectionInfo.MaxSessions);
                         }
-                        
-                        Console.WriteLine(_sessionSemaphore);
-                        return _sessionSemaphore;
                     }
                 }
 
-                
+                return _sessionSemaphore;
             }
         }
 
