@@ -844,7 +844,7 @@ namespace Renci.SshNet.Channels
                 var session = _session;
                 if (session != null)
                 {
-                    _session = null;
+                    //_session = null;
                     session.ChannelWindowAdjustReceived -= OnChannelWindowAdjust;
                     session.ChannelDataReceived -= OnChannelData;
                     session.ChannelExtendedDataReceived -= OnChannelExtendedData;
